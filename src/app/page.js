@@ -28,7 +28,7 @@ export default function Home() {
           dgConnection.send(event.data)
         }
         // 1000 is time slice
-        recorder.start(1000)
+        recorder.start(100)
         setMediaRecorder(recorder)
       })
 
@@ -127,6 +127,7 @@ export default function Home() {
             {transcript}
           </Typography>
         ) : (
+          // Just for the development purpose
           "कुछ इंग्लिश झाड़ो"
         )}
       </Box>
