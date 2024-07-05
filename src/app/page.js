@@ -10,7 +10,7 @@ export default function Home() {
   const [mediaRecorder, setMediaRecorder] = useState(null)
 
   const deepgram = createClient(process.env.NEXT_PUBLIC_DEEPGRAM_API_KEY)
-  const handleStart = async () => {
+  const startHandler = async () => {
     setIsListening(true)
 
     // We could have put in the util folder, but as project is small  I have put it there it self
@@ -27,7 +27,7 @@ export default function Home() {
         recorder.ondataavailable = (event) => {
           dgConnection.send(event.data)
         }
-        // 1000 is time slice
+        // 100 is time slice
         recorder.start(100)
         setMediaRecorder(recorder)
       })
@@ -48,7 +48,7 @@ export default function Home() {
     setDgConnection(dgConnection)
   }
 
-  const handlePause = () => {
+  const pauseHandler = () => {
     setIsListening(false)
     // console.log("Media recorder -> ", mediaRecorder)
     if (mediaRecorder) {
@@ -62,9 +62,10 @@ export default function Home() {
     // console.log("Dg connection ", dgConnection)
   }
 
-  const handleStop = () => {
-    dgConnection.on(LiveTranscriptionEvents.Close, () => {
-      console.log("Jai shree Ram")
+  const stopHandler = () => {
+    dgConnection.on(LiveTranscriptionEvents.Close, (e) => {
+      // we can put all post close action
+      console.log("Jai shree Ram", e)
     })
     setIsListening(false)
     setTranscript("")
@@ -90,7 +91,7 @@ export default function Home() {
       >
         <Button
           variant="contained"
-          onClick={handleStart}
+          onClick={startHandler}
           disabled={isListening}
           color="success"
         >
@@ -98,7 +99,7 @@ export default function Home() {
         </Button>
         <Button
           variant="contained"
-          onClick={handlePause}
+          onClick={pauseHandler}
           disabled={!isListening}
           color="warning"
         >
@@ -106,7 +107,7 @@ export default function Home() {
         </Button>
         <Button
           variant="contained"
-          onClick={handleStop}
+          onClick={stopHandler}
           disabled={!isListening}
           color="error"
         >
